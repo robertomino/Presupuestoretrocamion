@@ -1,5 +1,6 @@
-// Este proyecto permite es para uso de una cooperativa de servicios públicos que alquila una retroexcavadora y camión.
-// Permite cargar nombre de cliente, horas de uso de las maquinas y presupuestar el mismo.
+// Este proyecto es para uso de una cooperativa de servicios públicos que alquila una retroexcavadora y camión.
+// Realiza la carga del cliente, sea o no socio, horas de uso de las maquinas y presupuesta el uso de los mismos.
+// Tiene tarifas diferenciadas para socios y no socios.
 // Al final permite listar los clientes con sus presupuestos. 
 
 const datos = {
@@ -7,12 +8,12 @@ const datos = {
     contrasenia: "123",
     ingreso: false
 }
-const tarifaRetro = [45000, 55000]  // Tarifa para socio y para no socio
-const tarifaCamion = [40000, 50000] // Tarifa para socio y para no socio
+const tarifaRetro = [47000, 57000]  // Tarifa para socio y para no socio
+const tarifaCamion = [43000, 53000] // Tarifa para socio y para no socio
 
 const clientes=[] //array de objetos que guardará los clientes y su presupuesto asociado
 let intentos = 0;
-const maxCantidadIntentos = 3;
+const maxCantidadIntentos = 3
 
 function login(intentos, maxCantidadIntentos) {
     // Funcion para logeo
@@ -25,7 +26,7 @@ function login(intentos, maxCantidadIntentos) {
         datos.ingreso = true
         return datos
     } else {
-        alert(`Le quedan ${maxCantidadIntentos - (intentos + 1)} intentos`)
+        alert(`Datos erróneos. Le quedan ${maxCantidadIntentos - (intentos + 1)} intentos`)
     }
 }
 
@@ -49,15 +50,28 @@ function calculo(retro, camion) {
     return costo
 }
 
+function cargarHora (equipo) {
+    hora = parseFloat(prompt("Ingrese horas " + equipo + " (para decimal '.' no use ',')"))
+    if(Number.isNaN(hora)){
+        alert("Solo se permiten numeros y . para decimales")
+        cargarHora(equipo)
+    } else if (hora < 0) {
+        alert("Las horas no pueden ser negativas")
+        cargarHora(equipo)
+    } return hora
+    }
+
 const agregarCliente = () => { 
     //Permite ingreso de nombre y apellido del cliente y horas de retro y/o camion a presupuestar
-    const nombre = prompt('Ingrese el nombre y apellido del cliente');
-    const socio = confirm('Si es socio "Aceptar" ni no lo es "Cancelar"');
-    const horaretro = parseFloat(prompt('Ingrese cantidad de horas de retro'));
-    const horacamion = parseFloat(prompt('Ingrese horas camión'));
+    const nombre = prompt('Ingrese el nombre y apellido del cliente')
+    const socio = confirm('Si es socio "Aceptar" ni no lo es "Cancelar"')
+    const horaretro = cargarHora("retroexcavadora") 
+    const horacamion = cargarHora("camión")
     const cliente = { nombre: nombre, socio: socio, horaretro: horaretro, horacamion: horacamion, presupuesto: 0 }
-    return cliente;
+    return cliente
 }
+
+
 //Inicio
 
 loginLoop(0, 3);
